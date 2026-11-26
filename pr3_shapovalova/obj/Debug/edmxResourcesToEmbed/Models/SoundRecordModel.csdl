@@ -1,0 +1,715 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="SoundRecordSdModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Artist">
+    <Key>
+      <PropertyRef Name="ArtistID" />
+    </Key>
+    <Property Name="ArtistID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="SurName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Patronymic" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="StageName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Phone" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+    <Property Name="GenreID" Type="Int32" />
+    <NavigationProperty Name="Genre" Relationship="Self.FK_Artist_Genre" FromRole="Artist" ToRole="Genre" />
+    <NavigationProperty Name="SessionArtist" Relationship="Self.FK_SA_Artist" FromRole="Artist" ToRole="SessionArtist" />
+    <NavigationProperty Name="Track" Relationship="Self.FK_Track_Artist" FromRole="Artist" ToRole="Track" />
+  </EntityType>
+  <EntityType Name="Contract">
+    <Key>
+      <PropertyRef Name="ContractID" />
+    </Key>
+    <Property Name="ContractID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ContractNumber" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="ContractDate" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="ProducerID" Type="Int32" Nullable="false" />
+    <Property Name="ContractStatusID" Type="Int32" Nullable="false" />
+    <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="EndDate" Type="DateTime" Precision="0" />
+    <Property Name="ProfitSharePct" Type="Decimal" Precision="5" Scale="2" />
+    <Property Name="Terms" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Producer" Relationship="Self.FK_Contract_Producer" FromRole="Contract" ToRole="Producer" />
+    <NavigationProperty Name="ContractStatus" Relationship="Self.FK_Contract_Status" FromRole="Contract" ToRole="ContractStatus" />
+    <NavigationProperty Name="GeneratedDocument" Relationship="Self.FK_GD_Contract" FromRole="Contract" ToRole="GeneratedDocument" />
+    <NavigationProperty Name="Project" Relationship="Self.FK_Project_Contract" FromRole="Contract" ToRole="Project" />
+  </EntityType>
+  <EntityType Name="ContractStatus">
+    <Key>
+      <PropertyRef Name="ContractStatusID" />
+    </Key>
+    <Property Name="ContractStatusID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="StatusName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Contract" Relationship="Self.FK_Contract_Status" FromRole="ContractStatus" ToRole="Contract" />
+  </EntityType>
+  <EntityType Name="DocumentType">
+    <Key>
+      <PropertyRef Name="DocumentTypeID" />
+    </Key>
+    <Property Name="DocumentTypeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="GeneratedDocument" Relationship="Self.FK_GD_DocType" FromRole="DocumentType" ToRole="GeneratedDocument" />
+  </EntityType>
+  <EntityType Name="EmailLog">
+    <Key>
+      <PropertyRef Name="EmailLogID" />
+    </Key>
+    <Property Name="EmailLogID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Recipient" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Subject" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Body" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="SentDate" Type="DateTime" Nullable="false" Precision="7" />
+    <Property Name="ProjectID" Type="Int32" />
+    <NavigationProperty Name="Project" Relationship="Self.FK_EL_Project" FromRole="EmailLog" ToRole="Project" />
+  </EntityType>
+  <EntityType Name="Equipment">
+    <Key>
+      <PropertyRef Name="EquipmentID" />
+    </Key>
+    <Property Name="EquipmentID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="EquipmentName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="EquipmentTypeID" Type="Int32" Nullable="false" />
+    <Property Name="Model" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="IsAvailable" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="EquipmentType" Relationship="Self.FK_Equipment_Type" FromRole="Equipment" ToRole="EquipmentType" />
+    <NavigationProperty Name="SessionEquipment" Relationship="Self.FK_SE_Equipment" FromRole="Equipment" ToRole="SessionEquipment" />
+    <NavigationProperty Name="Track" Relationship="Self.FK_Track_Equipment" FromRole="Equipment" ToRole="Track" />
+  </EntityType>
+  <EntityType Name="EquipmentType">
+    <Key>
+      <PropertyRef Name="EquipmentTypeID" />
+    </Key>
+    <Property Name="EquipmentTypeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Equipment" Relationship="Self.FK_Equipment_Type" FromRole="EquipmentType" ToRole="Equipment" />
+  </EntityType>
+  <EntityType Name="GeneratedDocument">
+    <Key>
+      <PropertyRef Name="GeneratedDocumentID" />
+    </Key>
+    <Property Name="GeneratedDocumentID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="DocumentTypeID" Type="Int32" />
+    <Property Name="ReportTypeID" Type="Int32" />
+    <Property Name="DocumentNumber" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="FilePath" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="ProjectID" Type="Int32" />
+    <Property Name="ContractID" Type="Int32" />
+    <NavigationProperty Name="Contract" Relationship="Self.FK_GD_Contract" FromRole="GeneratedDocument" ToRole="Contract" />
+    <NavigationProperty Name="DocumentType" Relationship="Self.FK_GD_DocType" FromRole="GeneratedDocument" ToRole="DocumentType" />
+    <NavigationProperty Name="Project" Relationship="Self.FK_GD_Project" FromRole="GeneratedDocument" ToRole="Project" />
+    <NavigationProperty Name="ReportType" Relationship="Self.FK_GD_RepType" FromRole="GeneratedDocument" ToRole="ReportType" />
+  </EntityType>
+  <EntityType Name="Genre">
+    <Key>
+      <PropertyRef Name="GenreID" />
+    </Key>
+    <Property Name="GenreID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="GenreName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Artist" Relationship="Self.FK_Artist_Genre" FromRole="Genre" ToRole="Artist" />
+    <NavigationProperty Name="Project" Relationship="Self.FK_Project_Genre" FromRole="Genre" ToRole="Project" />
+  </EntityType>
+  <EntityType Name="Producer">
+    <Key>
+      <PropertyRef Name="ProducerID" />
+    </Key>
+    <Property Name="ProducerID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="SurName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Patronymic" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Phone" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Contract" Relationship="Self.FK_Contract_Producer" FromRole="Producer" ToRole="Contract" />
+    <NavigationProperty Name="Project" Relationship="Self.FK_Project_Producer" FromRole="Producer" ToRole="Project" />
+  </EntityType>
+  <EntityType Name="Project">
+    <Key>
+      <PropertyRef Name="ProjectID" />
+    </Key>
+    <Property Name="ProjectID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ProjectName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="GenreID" Type="Int32" />
+    <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="EndDate" Type="DateTime" Precision="0" />
+    <Property Name="ProjectStatusID" Type="Int32" Nullable="false" />
+    <Property Name="Budget" Type="Decimal" Precision="12" Scale="2" />
+    <Property Name="ProducerID" Type="Int32" Nullable="false" />
+    <Property Name="ContractID" Type="Int32" />
+    <NavigationProperty Name="Contract" Relationship="Self.FK_Project_Contract" FromRole="Project" ToRole="Contract" />
+    <NavigationProperty Name="EmailLog" Relationship="Self.FK_EL_Project" FromRole="Project" ToRole="EmailLog" />
+    <NavigationProperty Name="GeneratedDocument" Relationship="Self.FK_GD_Project" FromRole="Project" ToRole="GeneratedDocument" />
+    <NavigationProperty Name="Genre" Relationship="Self.FK_Project_Genre" FromRole="Project" ToRole="Genre" />
+    <NavigationProperty Name="Producer" Relationship="Self.FK_Project_Producer" FromRole="Project" ToRole="Producer" />
+    <NavigationProperty Name="ProjectStatus" Relationship="Self.FK_Project_Status" FromRole="Project" ToRole="ProjectStatus" />
+    <NavigationProperty Name="Session" Relationship="Self.FK_Session_Project" FromRole="Project" ToRole="Session" />
+  </EntityType>
+  <EntityType Name="ProjectStatus">
+    <Key>
+      <PropertyRef Name="ProjectStatusID" />
+    </Key>
+    <Property Name="ProjectStatusID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="StatusName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Project" Relationship="Self.FK_Project_Status" FromRole="ProjectStatus" ToRole="Project" />
+  </EntityType>
+  <EntityType Name="ReportType">
+    <Key>
+      <PropertyRef Name="ReportTypeID" />
+    </Key>
+    <Property Name="ReportTypeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="GeneratedDocument" Relationship="Self.FK_GD_RepType" FromRole="ReportType" ToRole="GeneratedDocument" />
+  </EntityType>
+  <EntityType Name="Role">
+    <Key>
+      <PropertyRef Name="RoleID" />
+    </Key>
+    <Property Name="RoleID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="RoleName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="SessionArtist" Relationship="Self.FK_SA_Role" FromRole="Role" ToRole="SessionArtist" />
+    <NavigationProperty Name="User" Relationship="Self.FK_User_Role" FromRole="Role" ToRole="User" />
+  </EntityType>
+  <EntityType Name="Room">
+    <Key>
+      <PropertyRef Name="RoomID" />
+    </Key>
+    <Property Name="RoomID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="RoomName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Location" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="IsAvailable" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="Session" Relationship="Self.FK_Session_Room" FromRole="Room" ToRole="Session" />
+  </EntityType>
+  <EntityType Name="Session">
+    <Key>
+      <PropertyRef Name="SessionID" />
+    </Key>
+    <Property Name="SessionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ProjectID" Type="Int32" Nullable="false" />
+    <Property Name="RoomID" Type="Int32" Nullable="false" />
+    <Property Name="SessionDate" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="StartTime" Type="Time" Nullable="false" Precision="7" />
+    <Property Name="EndTime" Type="Time" Precision="7" />
+    <Property Name="SessionTypeID" Type="Int32" Nullable="false" />
+    <Property Name="Notes" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Project" Relationship="Self.FK_Session_Project" FromRole="Session" ToRole="Project" />
+    <NavigationProperty Name="Room" Relationship="Self.FK_Session_Room" FromRole="Session" ToRole="Room" />
+    <NavigationProperty Name="SessionArtist" Relationship="Self.FK_SA_Session" FromRole="Session" ToRole="SessionArtist" />
+    <NavigationProperty Name="SessionEquipment" Relationship="Self.FK_SE_Session" FromRole="Session" ToRole="SessionEquipment" />
+    <NavigationProperty Name="SessionType" Relationship="Self.FK_Session_Type" FromRole="Session" ToRole="SessionType" />
+    <NavigationProperty Name="Track" Relationship="Self.FK_Track_Session" FromRole="Session" ToRole="Track" />
+  </EntityType>
+  <EntityType Name="SessionArtist">
+    <Key>
+      <PropertyRef Name="SessionArtistID" />
+    </Key>
+    <Property Name="SessionArtistID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="SessionID" Type="Int32" Nullable="false" />
+    <Property Name="ArtistID" Type="Int32" Nullable="false" />
+    <Property Name="RoleID" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Artist" Relationship="Self.FK_SA_Artist" FromRole="SessionArtist" ToRole="Artist" />
+    <NavigationProperty Name="Role" Relationship="Self.FK_SA_Role" FromRole="SessionArtist" ToRole="Role" />
+    <NavigationProperty Name="Session" Relationship="Self.FK_SA_Session" FromRole="SessionArtist" ToRole="Session" />
+  </EntityType>
+  <EntityType Name="SessionEquipment">
+    <Key>
+      <PropertyRef Name="SessionEquipmentID" />
+    </Key>
+    <Property Name="SessionEquipmentID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="SessionID" Type="Int32" Nullable="false" />
+    <Property Name="EquipmentID" Type="Int32" Nullable="false" />
+    <Property Name="UsageNotes" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Equipment" Relationship="Self.FK_SE_Equipment" FromRole="SessionEquipment" ToRole="Equipment" />
+    <NavigationProperty Name="Session" Relationship="Self.FK_SE_Session" FromRole="SessionEquipment" ToRole="Session" />
+  </EntityType>
+  <EntityType Name="SessionType">
+    <Key>
+      <PropertyRef Name="SessionTypeID" />
+    </Key>
+    <Property Name="SessionTypeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Session" Relationship="Self.FK_Session_Type" FromRole="SessionType" ToRole="Session" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="Track">
+    <Key>
+      <PropertyRef Name="TrackID" />
+    </Key>
+    <Property Name="TrackID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="SessionID" Type="Int32" Nullable="false" />
+    <Property Name="ArtistID" Type="Int32" Nullable="false" />
+    <Property Name="EquipmentID" Type="Int32" Nullable="false" />
+    <Property Name="TrackName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="FilePath" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="DurationSeconds" Type="Int32" Nullable="false" />
+    <Property Name="PreampSettings" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="IsDuplicate" Type="Boolean" Nullable="false" />
+    <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="7" />
+    <NavigationProperty Name="Artist" Relationship="Self.FK_Track_Artist" FromRole="Track" ToRole="Artist" />
+    <NavigationProperty Name="Equipment" Relationship="Self.FK_Track_Equipment" FromRole="Track" ToRole="Equipment" />
+    <NavigationProperty Name="Session" Relationship="Self.FK_Track_Session" FromRole="Track" ToRole="Session" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="UserID" />
+    </Key>
+    <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Login" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="PasswordHash" Type="String" MaxLength="64" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="RoleID" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Role" Relationship="Self.FK_User_Role" FromRole="User" ToRole="Role" />
+  </EntityType>
+  <Association Name="FK_Artist_Genre">
+    <End Role="Genre" Type="Self.Genre" Multiplicity="0..1" />
+    <End Role="Artist" Type="Self.Artist" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Genre">
+        <PropertyRef Name="GenreID" />
+      </Principal>
+      <Dependent Role="Artist">
+        <PropertyRef Name="GenreID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SA_Artist">
+    <End Role="Artist" Type="Self.Artist" Multiplicity="1" />
+    <End Role="SessionArtist" Type="Self.SessionArtist" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Artist">
+        <PropertyRef Name="ArtistID" />
+      </Principal>
+      <Dependent Role="SessionArtist">
+        <PropertyRef Name="ArtistID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Track_Artist">
+    <End Role="Artist" Type="Self.Artist" Multiplicity="1" />
+    <End Role="Track" Type="Self.Track" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Artist">
+        <PropertyRef Name="ArtistID" />
+      </Principal>
+      <Dependent Role="Track">
+        <PropertyRef Name="ArtistID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Contract_Producer">
+    <End Role="Producer" Type="Self.Producer" Multiplicity="1" />
+    <End Role="Contract" Type="Self.Contract" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Producer">
+        <PropertyRef Name="ProducerID" />
+      </Principal>
+      <Dependent Role="Contract">
+        <PropertyRef Name="ProducerID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Contract_Status">
+    <End Role="ContractStatus" Type="Self.ContractStatus" Multiplicity="1" />
+    <End Role="Contract" Type="Self.Contract" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ContractStatus">
+        <PropertyRef Name="ContractStatusID" />
+      </Principal>
+      <Dependent Role="Contract">
+        <PropertyRef Name="ContractStatusID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_GD_Contract">
+    <End Role="Contract" Type="Self.Contract" Multiplicity="0..1" />
+    <End Role="GeneratedDocument" Type="Self.GeneratedDocument" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Contract">
+        <PropertyRef Name="ContractID" />
+      </Principal>
+      <Dependent Role="GeneratedDocument">
+        <PropertyRef Name="ContractID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Project_Contract">
+    <End Role="Contract" Type="Self.Contract" Multiplicity="0..1" />
+    <End Role="Project" Type="Self.Project" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Contract">
+        <PropertyRef Name="ContractID" />
+      </Principal>
+      <Dependent Role="Project">
+        <PropertyRef Name="ContractID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_GD_DocType">
+    <End Role="DocumentType" Type="Self.DocumentType" Multiplicity="0..1" />
+    <End Role="GeneratedDocument" Type="Self.GeneratedDocument" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DocumentType">
+        <PropertyRef Name="DocumentTypeID" />
+      </Principal>
+      <Dependent Role="GeneratedDocument">
+        <PropertyRef Name="DocumentTypeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_EL_Project">
+    <End Role="Project" Type="Self.Project" Multiplicity="0..1" />
+    <End Role="EmailLog" Type="Self.EmailLog" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Project">
+        <PropertyRef Name="ProjectID" />
+      </Principal>
+      <Dependent Role="EmailLog">
+        <PropertyRef Name="ProjectID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Equipment_Type">
+    <End Role="EquipmentType" Type="Self.EquipmentType" Multiplicity="1" />
+    <End Role="Equipment" Type="Self.Equipment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="EquipmentType">
+        <PropertyRef Name="EquipmentTypeID" />
+      </Principal>
+      <Dependent Role="Equipment">
+        <PropertyRef Name="EquipmentTypeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SE_Equipment">
+    <End Role="Equipment" Type="Self.Equipment" Multiplicity="1" />
+    <End Role="SessionEquipment" Type="Self.SessionEquipment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Equipment">
+        <PropertyRef Name="EquipmentID" />
+      </Principal>
+      <Dependent Role="SessionEquipment">
+        <PropertyRef Name="EquipmentID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Track_Equipment">
+    <End Role="Equipment" Type="Self.Equipment" Multiplicity="1" />
+    <End Role="Track" Type="Self.Track" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Equipment">
+        <PropertyRef Name="EquipmentID" />
+      </Principal>
+      <Dependent Role="Track">
+        <PropertyRef Name="EquipmentID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_GD_Project">
+    <End Role="Project" Type="Self.Project" Multiplicity="0..1" />
+    <End Role="GeneratedDocument" Type="Self.GeneratedDocument" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Project">
+        <PropertyRef Name="ProjectID" />
+      </Principal>
+      <Dependent Role="GeneratedDocument">
+        <PropertyRef Name="ProjectID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_GD_RepType">
+    <End Role="ReportType" Type="Self.ReportType" Multiplicity="0..1" />
+    <End Role="GeneratedDocument" Type="Self.GeneratedDocument" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ReportType">
+        <PropertyRef Name="ReportTypeID" />
+      </Principal>
+      <Dependent Role="GeneratedDocument">
+        <PropertyRef Name="ReportTypeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Project_Genre">
+    <End Role="Genre" Type="Self.Genre" Multiplicity="0..1" />
+    <End Role="Project" Type="Self.Project" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Genre">
+        <PropertyRef Name="GenreID" />
+      </Principal>
+      <Dependent Role="Project">
+        <PropertyRef Name="GenreID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Project_Producer">
+    <End Role="Producer" Type="Self.Producer" Multiplicity="1" />
+    <End Role="Project" Type="Self.Project" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Producer">
+        <PropertyRef Name="ProducerID" />
+      </Principal>
+      <Dependent Role="Project">
+        <PropertyRef Name="ProducerID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Project_Status">
+    <End Role="ProjectStatus" Type="Self.ProjectStatus" Multiplicity="1" />
+    <End Role="Project" Type="Self.Project" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProjectStatus">
+        <PropertyRef Name="ProjectStatusID" />
+      </Principal>
+      <Dependent Role="Project">
+        <PropertyRef Name="ProjectStatusID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Session_Project">
+    <End Role="Project" Type="Self.Project" Multiplicity="1" />
+    <End Role="Session" Type="Self.Session" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Project">
+        <PropertyRef Name="ProjectID" />
+      </Principal>
+      <Dependent Role="Session">
+        <PropertyRef Name="ProjectID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SA_Role">
+    <End Role="Role" Type="Self.Role" Multiplicity="1" />
+    <End Role="SessionArtist" Type="Self.SessionArtist" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Role">
+        <PropertyRef Name="RoleID" />
+      </Principal>
+      <Dependent Role="SessionArtist">
+        <PropertyRef Name="RoleID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_User_Role">
+    <End Role="Role" Type="Self.Role" Multiplicity="1" />
+    <End Role="User" Type="Self.User" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Role">
+        <PropertyRef Name="RoleID" />
+      </Principal>
+      <Dependent Role="User">
+        <PropertyRef Name="RoleID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Session_Room">
+    <End Role="Room" Type="Self.Room" Multiplicity="1" />
+    <End Role="Session" Type="Self.Session" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Room">
+        <PropertyRef Name="RoomID" />
+      </Principal>
+      <Dependent Role="Session">
+        <PropertyRef Name="RoomID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SA_Session">
+    <End Role="Session" Type="Self.Session" Multiplicity="1" />
+    <End Role="SessionArtist" Type="Self.SessionArtist" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Session">
+        <PropertyRef Name="SessionID" />
+      </Principal>
+      <Dependent Role="SessionArtist">
+        <PropertyRef Name="SessionID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SE_Session">
+    <End Role="Session" Type="Self.Session" Multiplicity="1" />
+    <End Role="SessionEquipment" Type="Self.SessionEquipment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Session">
+        <PropertyRef Name="SessionID" />
+      </Principal>
+      <Dependent Role="SessionEquipment">
+        <PropertyRef Name="SessionID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Session_Type">
+    <End Role="SessionType" Type="Self.SessionType" Multiplicity="1" />
+    <End Role="Session" Type="Self.Session" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SessionType">
+        <PropertyRef Name="SessionTypeID" />
+      </Principal>
+      <Dependent Role="Session">
+        <PropertyRef Name="SessionTypeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Track_Session">
+    <End Role="Session" Type="Self.Session" Multiplicity="1" />
+    <End Role="Track" Type="Self.Track" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Session">
+        <PropertyRef Name="SessionID" />
+      </Principal>
+      <Dependent Role="Track">
+        <PropertyRef Name="SessionID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="SoundRecordSdEntities1" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Artist" EntityType="Self.Artist" />
+    <EntitySet Name="Contract" EntityType="Self.Contract" />
+    <EntitySet Name="ContractStatus" EntityType="Self.ContractStatus" />
+    <EntitySet Name="DocumentType" EntityType="Self.DocumentType" />
+    <EntitySet Name="EmailLog" EntityType="Self.EmailLog" />
+    <EntitySet Name="Equipment" EntityType="Self.Equipment" />
+    <EntitySet Name="EquipmentType" EntityType="Self.EquipmentType" />
+    <EntitySet Name="GeneratedDocument" EntityType="Self.GeneratedDocument" />
+    <EntitySet Name="Genre" EntityType="Self.Genre" />
+    <EntitySet Name="Producer" EntityType="Self.Producer" />
+    <EntitySet Name="Project" EntityType="Self.Project" />
+    <EntitySet Name="ProjectStatus" EntityType="Self.ProjectStatus" />
+    <EntitySet Name="ReportType" EntityType="Self.ReportType" />
+    <EntitySet Name="Role" EntityType="Self.Role" />
+    <EntitySet Name="Room" EntityType="Self.Room" />
+    <EntitySet Name="Session" EntityType="Self.Session" />
+    <EntitySet Name="SessionArtist" EntityType="Self.SessionArtist" />
+    <EntitySet Name="SessionEquipment" EntityType="Self.SessionEquipment" />
+    <EntitySet Name="SessionType" EntityType="Self.SessionType" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+    <EntitySet Name="Track" EntityType="Self.Track" />
+    <EntitySet Name="User" EntityType="Self.User" />
+    <AssociationSet Name="FK_Artist_Genre" Association="Self.FK_Artist_Genre">
+      <End Role="Genre" EntitySet="Genre" />
+      <End Role="Artist" EntitySet="Artist" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SA_Artist" Association="Self.FK_SA_Artist">
+      <End Role="Artist" EntitySet="Artist" />
+      <End Role="SessionArtist" EntitySet="SessionArtist" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Track_Artist" Association="Self.FK_Track_Artist">
+      <End Role="Artist" EntitySet="Artist" />
+      <End Role="Track" EntitySet="Track" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Contract_Producer" Association="Self.FK_Contract_Producer">
+      <End Role="Producer" EntitySet="Producer" />
+      <End Role="Contract" EntitySet="Contract" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Contract_Status" Association="Self.FK_Contract_Status">
+      <End Role="ContractStatus" EntitySet="ContractStatus" />
+      <End Role="Contract" EntitySet="Contract" />
+    </AssociationSet>
+    <AssociationSet Name="FK_GD_Contract" Association="Self.FK_GD_Contract">
+      <End Role="Contract" EntitySet="Contract" />
+      <End Role="GeneratedDocument" EntitySet="GeneratedDocument" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Project_Contract" Association="Self.FK_Project_Contract">
+      <End Role="Contract" EntitySet="Contract" />
+      <End Role="Project" EntitySet="Project" />
+    </AssociationSet>
+    <AssociationSet Name="FK_GD_DocType" Association="Self.FK_GD_DocType">
+      <End Role="DocumentType" EntitySet="DocumentType" />
+      <End Role="GeneratedDocument" EntitySet="GeneratedDocument" />
+    </AssociationSet>
+    <AssociationSet Name="FK_EL_Project" Association="Self.FK_EL_Project">
+      <End Role="Project" EntitySet="Project" />
+      <End Role="EmailLog" EntitySet="EmailLog" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Equipment_Type" Association="Self.FK_Equipment_Type">
+      <End Role="EquipmentType" EntitySet="EquipmentType" />
+      <End Role="Equipment" EntitySet="Equipment" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SE_Equipment" Association="Self.FK_SE_Equipment">
+      <End Role="Equipment" EntitySet="Equipment" />
+      <End Role="SessionEquipment" EntitySet="SessionEquipment" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Track_Equipment" Association="Self.FK_Track_Equipment">
+      <End Role="Equipment" EntitySet="Equipment" />
+      <End Role="Track" EntitySet="Track" />
+    </AssociationSet>
+    <AssociationSet Name="FK_GD_Project" Association="Self.FK_GD_Project">
+      <End Role="Project" EntitySet="Project" />
+      <End Role="GeneratedDocument" EntitySet="GeneratedDocument" />
+    </AssociationSet>
+    <AssociationSet Name="FK_GD_RepType" Association="Self.FK_GD_RepType">
+      <End Role="ReportType" EntitySet="ReportType" />
+      <End Role="GeneratedDocument" EntitySet="GeneratedDocument" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Project_Genre" Association="Self.FK_Project_Genre">
+      <End Role="Genre" EntitySet="Genre" />
+      <End Role="Project" EntitySet="Project" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Project_Producer" Association="Self.FK_Project_Producer">
+      <End Role="Producer" EntitySet="Producer" />
+      <End Role="Project" EntitySet="Project" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Project_Status" Association="Self.FK_Project_Status">
+      <End Role="ProjectStatus" EntitySet="ProjectStatus" />
+      <End Role="Project" EntitySet="Project" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Session_Project" Association="Self.FK_Session_Project">
+      <End Role="Project" EntitySet="Project" />
+      <End Role="Session" EntitySet="Session" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SA_Role" Association="Self.FK_SA_Role">
+      <End Role="Role" EntitySet="Role" />
+      <End Role="SessionArtist" EntitySet="SessionArtist" />
+    </AssociationSet>
+    <AssociationSet Name="FK_User_Role" Association="Self.FK_User_Role">
+      <End Role="Role" EntitySet="Role" />
+      <End Role="User" EntitySet="User" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Session_Room" Association="Self.FK_Session_Room">
+      <End Role="Room" EntitySet="Room" />
+      <End Role="Session" EntitySet="Session" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SA_Session" Association="Self.FK_SA_Session">
+      <End Role="Session" EntitySet="Session" />
+      <End Role="SessionArtist" EntitySet="SessionArtist" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SE_Session" Association="Self.FK_SE_Session">
+      <End Role="Session" EntitySet="Session" />
+      <End Role="SessionEquipment" EntitySet="SessionEquipment" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Session_Type" Association="Self.FK_Session_Type">
+      <End Role="SessionType" EntitySet="SessionType" />
+      <End Role="Session" EntitySet="Session" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Track_Session" Association="Self.FK_Track_Session">
+      <End Role="Session" EntitySet="Session" />
+      <End Role="Track" EntitySet="Track" />
+    </AssociationSet>
+    <EntitySet Name="LoginHistory" EntityType="SoundRecordSdModel.LoginHistory" />
+  </EntityContainer>
+  <EntityType Name="LoginHistory">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserLogin" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="AttemptTime" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="IsSuccess" Type="Boolean" Nullable="false" />
+    <Property Name="FailReason" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+  </EntityType>
+</Schema>

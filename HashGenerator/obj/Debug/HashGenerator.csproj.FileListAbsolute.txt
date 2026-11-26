@@ -1,0 +1,7 @@
+C:\Users\Софья\source\repos\pr3_shapovalova\HashGenerator\bin\Debug\HashGenerator.exe.config
+C:\Users\Софья\source\repos\pr3_shapovalova\HashGenerator\bin\Debug\HashGenerator.exe
+C:\Users\Софья\source\repos\pr3_shapovalova\HashGenerator\bin\Debug\HashGenerator.pdb
+C:\Users\Софья\source\repos\pr3_shapovalova\HashGenerator\obj\Debug\HashGenerator.csproj.AssemblyReference.cache
+C:\Users\Софья\source\repos\pr3_shapovalova\HashGenerator\obj\Debug\HashGenerator.csproj.CoreCompileInputs.cache
+C:\Users\Софья\source\repos\pr3_shapovalova\HashGenerator\obj\Debug\HashGenerator.exe
+C:\Users\Софья\source\repos\pr3_shapovalova\HashGenerator\obj\Debug\HashGenerator.pdb
